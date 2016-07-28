@@ -13,6 +13,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WorkService", "WorkService\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Common", "Common\Common.xproj", "{4050AE50-DE0C-482A-BDCD-A9EC0ECED466}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WorkService.Tests", "WorkService.Tests\WorkService.Tests.xproj", "{4F97C00E-57E7-44B3-8F98-4CA783037065}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,14 @@ Global
 		{4050AE50-DE0C-482A-BDCD-A9EC0ECED466}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4050AE50-DE0C-482A-BDCD-A9EC0ECED466}.Release|x64.ActiveCfg = Release|Any CPU
 		{4050AE50-DE0C-482A-BDCD-A9EC0ECED466}.Release|x64.Build.0 = Release|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Debug|x64.Build.0 = Debug|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Release|x64.ActiveCfg = Release|Any CPU
+		{4F97C00E-57E7-44B3-8F98-4CA783037065}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

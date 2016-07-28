@@ -29,10 +29,12 @@ body {
     background:#222222;
     color:#DDDDDD;
 }
-#main { width: 800px; margin: 50px auto }
+#main { width: 900px; margin: 50px auto }
+#jobSide { float:left; margin:0 10px; width: 420px }
+#workSide { float:left; margin:0 10px; width: 420px }
 fieldset { border: 1px solid #AAAAAA; margin: 10px; padding: 5px}
-input[type=text] { display: inline-block; width: 200px; padding: 5px; margin: 10px; background: #555555; color:#EEEEEE; border: 1px solid #999999 }
-button { display: inline-block; width: 100px; padding: 3px; }
+input[type=text] { display: block; width: 200px; padding: 5px; margin: 10px; background: #555555; color:#EEEEEE; border: 1px solid #999999 }
+button { display: block; width: 100px; padding: 3px; }
 ul { margin: 20px 0 0 0; }
 ul li { list-style: none; margin: 3px 0; padding: 0; color:#DDD;}
 #result { margin:10px 0 }

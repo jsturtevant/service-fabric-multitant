@@ -18,9 +18,12 @@ namespace WorkService
 
     internal sealed class WorkService : StatefulService
     {
+        private readonly IList<Task> runningJobs;
+
         public WorkService(StatefulServiceContext serviceContext)
             : base(serviceContext)
         {
+            this.runningJobs = new List<Task>();
         }
 
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
@@ -47,42 +50,74 @@ namespace WorkService
             IReliableQueue<string> queue = await this.StateManager.GetOrAddAsync<IReliableQueue<string>>("jobQueue");
             IReliableDictionary<string, Job> dictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, Job>>("jobs");
 
-            // need to restart any existing jobs after failover
-            using (ITransaction tx = this.StateManager.CreateTransaction())
+            try
             {
-                var enumerable = await dictionary.CreateEnumerableAsync(tx);
-                var enumerator = enumerable.GetAsyncEnumerator();
 
-                while (await enumerator.MoveNextAsync(cancellationToken))
-                {
-                    Job job = enumerator.Current.Value;
-
-                    Task t = this.StartJob(job, cancellationToken);
-                }
-            }
-
-            // start processing new jobs from the queue.
-            while (true)
-            {
+                // need to restart any existing jobs after failover
                 using (ITransaction tx = this.StateManager.CreateTransaction())
                 {
-                    ConditionalValue<string> result = await queue.TryDequeueAsync(tx);
+                    var enumerable = await dictionary.CreateEnumerableAsync(tx);
+                    var enumerator = enumerable.GetAsyncEnumerator();
 
-                    if (!result.HasValue)
+                    while (await enumerator.MoveNextAsync(cancellationToken))
                     {
-                        await Task.Delay(TimeSpan.FromMilliseconds(500));
-                        continue;
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        Job job = enumerator.Current.Value;
+                        
+                        this.runningJobs.Add(this.StartJob(job, cancellationToken));
                     }
-
-                    ConditionalValue<Job> job = await dictionary.TryGetValueAsync(tx, result.Value);
-
-                    if (job.HasValue)
-                    {
-                        Task t = this.StartJob(job.Value, cancellationToken);
-                    }
-
-                    await tx.CommitAsync();
                 }
+
+                // start processing new jobs from the queue.
+                while (true)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    try
+                    {
+                        using (ITransaction tx = this.StateManager.CreateTransaction())
+                        {
+                            ConditionalValue<string> dequeueResult = await queue.TryDequeueAsync(tx);
+
+                            if (!dequeueResult.HasValue)
+                            {
+                                await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
+                                continue;
+                            }
+
+                            string jobName = dequeueResult.Value;
+
+                            ConditionalValue<Job> getResult = await dictionary.TryGetValueAsync(tx, jobName, LockMode.Update);
+
+                            if (getResult.HasValue)
+                            {
+                                Job job = getResult.Value;
+                                
+                                this.runningJobs.Add(this.StartJob(job, cancellationToken));
+
+                                await dictionary.SetAsync(tx, jobName, new Job(job.Name, job.Parameters, job.Running));
+                            }
+
+                            await tx.CommitAsync();
+                        }
+                    }
+                    catch (FabricTransientException)
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
+                    }
+                    catch (TimeoutException)
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
+                    }
+                }
+
+            }
+            catch (OperationCanceledException)
+            {
+                await Task.WhenAll(this.runningJobs);
+
+                throw;
             }
         }
 

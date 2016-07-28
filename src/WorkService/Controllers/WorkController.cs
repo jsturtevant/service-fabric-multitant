@@ -56,7 +56,7 @@ namespace WorkService.Controllers
                     throw new ArgumentException($"Job {name} already exists.");
                 }
 
-                Job job = new Job(name, parameters);
+                Job job = new Job(name, parameters, false);
 
                 await queue.EnqueueAsync(tx, name);
                 await dictionary.SetAsync(tx, name, job);

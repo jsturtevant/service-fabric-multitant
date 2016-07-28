@@ -3,21 +3,26 @@
 }
 
 <div id="main">
-    <fieldset>
-        <legend>Job Service Instance</legend>
-        <input type="text" id="jobName" />
-        <input type="text" id="jobParameters" />
-        <button id="newJob">Create job</button>
-    </fieldset>
-    <fieldset>
-        <legend>Work Service</legend>
-        <input type="text" id="workName" />
-        <input type="text" id="workParameters" />
-        <button id="newWork">Create job</button>
-    </fieldset>
-    <div id="result"></div>
-    <ul id="jobs"></ul>
-    <ul id="work"></ul>
+    <div id="jobSide">
+        <fieldset>
+            <legend>Job Service Instance</legend>
+            <input type="text" id="jobName" />
+            <input type="text" id="jobParameters" />
+            <button id="newJob">Create job</button>
+        </fieldset>
+        <div id="jobResult"></div>
+        <ul id="jobs"></ul>
+    </div>
+    <div id="workSide">
+        <fieldset>
+            <legend>Work Service</legend>
+            <input type="text" id="workName" />
+            <input type="text" id="workParameters" />
+            <button id="newWork">Create job</button>
+        </fieldset>
+        <div id="workResult"></div>
+        <ul id="work"></ul>
+    </div>
 </div>
 <script>
     $(function () {
@@ -34,10 +39,10 @@
 		        dataType: 'json'
 		    })
             .done(function () {
-                $('#result').html('creating');
+                $('#jobResult').html('creating');
             })
             .error(function (error) {
-                $('#result').html(error);
+                $('#jobResult').html(error);
             })
 		});
 
@@ -52,10 +57,10 @@
                 dataType: 'json'
             })
             .done(function () {
-                $('#result').html('creating');
+                $('#workResult').html('creating');
             })
             .error(function (error) {
-                $('#result').html(error);
+                $('#workResult').html(error);
             })
         });
 
