@@ -25,11 +25,9 @@ namespace WebService.Controllers
         }
 
         [HttpGet]
-        public Task<ServiceList> Get()
+        public Task<ApplicationList> Get()
         {
-            string applicationName = this.context.CodePackageActivationContext.ApplicationName;
-
-            return fabricClient.QueryManager.GetServiceListAsync(new Uri(applicationName));
+            return fabricClient.QueryManager.GetApplicationListAsync();
         }
 
         [HttpPost]
