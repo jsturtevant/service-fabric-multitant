@@ -33,6 +33,14 @@ namespace Home
                 new ServiceInstanceListener(serviceContext =>
                     new WebListenerCommunicationListener(serviceContext, "ServiceEndpoint", url =>
                     {
+                        
+                         ConfigurationPackage configPackage =
+                        serviceContext.CodePackageActivationContext.GetConfigurationPackageObject("Config");
+
+                        string appPath = configPackage.Settings.Sections["Web"].Parameters["AppPath"].Value;
+
+                        url += $"/{appPath}";
+
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting WebListener on {url}");
 
                         return new WebHostBuilder().UseWebListener()

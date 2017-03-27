@@ -36,26 +36,18 @@ namespace WebService.Controllers
         [Route("{jobName}/{parameters}")]
         public Task Post(string jobName, string parameters)
         {
-            string applicationName = this.context.CodePackageActivationContext.ApplicationName;
-
-            StatefulServiceDescription serviceDescription = new StatefulServiceDescription()
+            var app = new ApplicationDescription()
             {
-                ApplicationName = new Uri(applicationName),
-                MinReplicaSetSize = 3,
-                TargetReplicaSetSize = 3,
-                PartitionSchemeDescription = new UniformInt64RangePartitionSchemeDescription()
-                {
-                    LowKey = 0,
-                    HighKey = 10,
-                    PartitionCount = 1
-                },
-                HasPersistedState = true,
-                InitializationData = Encoding.UTF8.GetBytes(parameters),
-                ServiceTypeName = "JobServiceType",
-                ServiceName = new Uri($"{applicationName}/jobs/{jobName}")
+                ApplicationName = new Uri($"fabric:/{jobName}"),
+                ApplicationTypeName = "MyShopType",
+                MaximumNodes = 3,
+                ApplicationTypeVersion = "1.0.0"
             };
 
-            return fabricClient.ServiceManager.CreateServiceAsync(serviceDescription);
+            app.ApplicationParameters.Add("WebService_AppPath", jobName);
+
+            return fabricClient.ApplicationManager.CreateApplicationAsync(app);
+            //return fabricClient.ServiceManager.CreateServiceAsync(serviceDescription);
         }
         
     }
