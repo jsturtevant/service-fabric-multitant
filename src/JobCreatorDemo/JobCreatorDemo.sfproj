@@ -29,9 +29,7 @@
     <Content Include="PublishProfiles\Local.1Node.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JobService\JobService.csproj" />
     <ProjectReference Include="..\WebService\WebService.csproj" />
-    <ProjectReference Include="..\WorkService\WorkService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

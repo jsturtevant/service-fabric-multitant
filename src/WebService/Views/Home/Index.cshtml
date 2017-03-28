@@ -3,26 +3,17 @@
 }
 
 <div id="main">
-    <div id="jobSide">
+    <div id="tenantSide">
         <fieldset>
             <legend>Tenant Service Instance</legend>
             <input type="text" id="tenantName" />
             <input type="text" id="tenantParameters" />
             <button id="newTenant">Create tenant</button>
         </fieldset>
-        <div id="jobResult"></div>
-        <ul id="jobs"></ul>
+        <div id="tenantResult"></div>
+        <ul id="tenants"></ul>
     </div>
-    @*<div id="workSide">
-        <fieldset>
-            <legend>Work Service</legend>
-            <input type="text" id="workName" />
-            <input type="text" id="workParameters" />
-            <button id="newWork">Create job</button>
-        </fieldset>
-        <div id="workResult"></div>
-        <ul id="work"></ul>
-    </div>*@
+    
 </div>
 <script>
     $(function () {
@@ -33,45 +24,45 @@
             var name = $('#tenantName').val();
             var params = $('#tenantParameters').val();
 		    $.ajax({
-		        url: path + '/api/jobservice/' + name + '/' + params,
+		        url: path + '/api/tenantservice/' + name + '/' + params,
 		        method: 'POST',
 		        contentType: 'application/json',
 		        dataType: 'json'
 		    })
             .done(function () {
-                $('#jobResult').html('creating');
+                $('#tenantResult').html('creating');
             })
             .error(function (error) {
-                $('#jobResult').html(error);
+                $('#tenantResult').html(error);
             })
 		});
 
       
 
-        function refreshJobList() {
+        function refreshTenantList() {
             $.ajax({
-                url: path + '/api/jobservice',
+                url: path + '/api/tenantservice',
                 method: 'GET',
                 contentType: 'application/json',
                 dataType: 'json'
             })
-            .done(function (jobs) {
-                var jobList = $('#jobs');
+            .done(function (tenantsList) {
+                var tenants = $('#tenants');
 
-                jobList.html('');
-                for (var i = 0; i < jobs.length; ++i) {
-                    jobList.append('<li>' + jobs[i].applicationName + '</li>');
+                tenants.html('');
+                for (var i = 0; i < tenantsList.length; ++i) {
+                    tenants.append('<li>' + tenantsList[i].applicationName + '</li>');
                 }
             })
             .always(function () {
                 setTimeout(function () {
-                    refreshJobList();
+                    refreshTenantList();
                 }, 1000);
             });
         }
 
       
-        refreshJobList();
+        refreshTenantList();
 
     });
 </script>
