@@ -1,2 +1,2 @@
-# job-scheduler-demo
-Service Fabric job scheduling application demo.
+# Multi-tenant demo
+Demonstration of Service Fabric Application Types and Service Types to create multi-tenanted solution.
