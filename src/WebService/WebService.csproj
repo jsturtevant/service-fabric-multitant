@@ -6,6 +6,7 @@
     <AssemblyName>WebService</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>WebService</PackageId>
+    <IsServiceFabricServiceProject>True</IsServiceFabricServiceProject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

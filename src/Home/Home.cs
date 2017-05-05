@@ -39,7 +39,7 @@ namespace Home
 
                         string appPath = configPackage.Settings.Sections["Web"].Parameters["AppPath"].Value;
 
-                        url += $"/{appPath}";
+                        //url += $"/{appPath}";
 
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting WebListener on {url}");
 
